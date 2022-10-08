@@ -1,0 +1,16 @@
+arc-gtk-theme-eos
+eos-lightdm-slick-theme
+eos-qogir-icons
+celluloid
+gvfs
+gvfs-afc
+gvfs-gphoto2
+gvfs-mtp
+gvfs-nfs
+gvfs-smb
+lightdm
+lightdm-slick-greeter
+mate
+mate-extra
+network-manager-applet
+xdg-user-dirs-gtk
