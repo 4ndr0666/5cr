@@ -1,0 +1,14 @@
+#!/bin/bash
+echo "This will disable NetworkManager, possibly avoiding the random dropping of IPs"
+sudo systemctl stop NetworkManager
+if [ "$?" != "0" ]; then
+	echo "Systemctl failed, trying with service..."
+	sudo service NetworkManager stop
+	if [ "$?" != "0" ]; then
+		echo "Everything failed, trying something else..."
+	else
+		echo "Done!"
+	fi
+else
+	echo "Done!"
+fi
