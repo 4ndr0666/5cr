@@ -16,6 +16,7 @@
 
 
 
+
 # Check status 
 sysctl -a|grep disable_ipv6
 
@@ -27,20 +28,15 @@ sudo sed -i "/$v1/d" /etc/sysctl.conf
 sudo sed -i "/$v2/d" /etc/sysctl.conf
 sudo sed -i "/$v3/d" /etc/sysctl.conf
 sudo sed -i "/$v4/d" /etc/sysctl.conf
-
-sudo bash -c "echo $v1 >> /etc/sysctl.conf";
-sudo bash -c "echo $v2 >> /etc/sysctl.conf";
-sudo bash -c "echo $v3 >> /etc/sysctl.conf";
-sudo bash -c "echo -n $v4 >> /etc/sysctl.conf";  
-echo -n "1" > /proc/sys/net/ipv6/conf/all/disable_ipv6;
-sudo sysctl -p; 
-# Alternative way but I use both to be sure
-sudo sysctl -w net.ipv6.conf.all.disable_ipv6=1
-sudo sysctl -w net.ipv6.conf.default.disable_ipv6=1
+echo -n "0" > /proc/sys/net/ipv6/conf/all/disable_ipv6;
 sudo sysctl -p;
-writeToJson "No" "ipv6status";
-notify-send -i $notifyIcon "IPv6 disabled"; 
-	
+# Alternative way but I use both to be sure
+sysctl -w net.ipv6.conf.all.disable_ipv6=0
+sysctl -w net.ipv6.conf.default.disable_ipv6=0
+sudo sysctl -p;
+writeToJason "Yes" "ipv6status";
+notify-send -i $notifyIcon "IPv6 enabled"; 
+
 exit 1
 
 
