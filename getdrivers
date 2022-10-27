@@ -14,7 +14,7 @@
 
 
 cd $(dirname $0) 
-source Globalconfig;
+#source Globalconfig;
 
 
 
