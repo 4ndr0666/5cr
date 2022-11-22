@@ -1,0 +1,15 @@
+#!/usr/bin/env python2
+
+from Mimeo import Mimeo
+from sys import argv
+
+mimeo = Mimeo()
+mimetypes = set(argv[1:])
+for mimetype in sorted(mimetypes):
+  print mimetype
+  desktops = mimeo.get_associated_desktop_names(mimetype)
+  if desktops:
+    for desktop in desktops:
+      print "\t%s" % desktop
+  else:
+    print "None"
