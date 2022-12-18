@@ -1,5 +1,5 @@
 #!/bin/bash
-# Script written by Warith Al Maawali  
+# Script written by Warith Al Maawali
 # (c) 2022 Founder of Eagle Eye Digital Solutions
 # Discord channel https://discord.gg/KEFErEx
 # Twitter http://twitter.com/warith2020
@@ -12,32 +12,19 @@
 # script starts here:
 
 
-cd $(dirname $0) 
-source Globalconfig;
-  
+#cd $(dirname $0)
+#source Globalconfig;
+
 for intf in /sys/class/net/*; do
 	sudo ifconfig `basename $intf` down
 	notify-send -i $notifyIcon "Taking $intf down";
 done
 
 sudo service tor stop;
-sudo service openvpn stop; 
+sudo service openvpn stop;
 sudo killall tor;
 sudo killall openvpn;
 sudo killall -SIGINT openvpn;
 sudo service network-manager stop;
 notify-send -i $notifyIcon "All network devices have been disabled";
 exit 1;
-
-
-
-
-
-
- 
-
-
-
-
-
-

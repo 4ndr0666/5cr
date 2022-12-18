@@ -2,9 +2,9 @@
 #
 #
 
-cd $(dirname $0) 
-source Globalconfig;
-   
+#cd $(dirname $0)
+#source Globalconfig;
+
 for intf in /sys/class/net/*; do
 	sudo ifconfig `basename $intf` up
 	notify-send -i $notifyIcon "Bringing $intf up";
@@ -12,16 +12,3 @@ done
 sudo service network-manager restart;
 notify-send -i $notifyIcon "All network devices have been enabled";
 exit 1;
-
-
-
-
-
-
- 
-
-
-
-
-
-

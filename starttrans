@@ -1,0 +1,2 @@
+#!/usr/bin/env bash
+printf 'transmission-daemon -t -u arch -v linux -p 9091 -a "127.0.0.1"'
