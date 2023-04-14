@@ -1,2 +1,24 @@
 #!/bin/sh
-gs -dBATCH -dNOPAUSE -sDEVICE=pdfwrite -sOutputFile=- -f "$@"
+set -e
+
+if [ $# -lt 2 ]; then
+  echo "Usage: $0 output.pdf input1.pdf [input2.pdf ...]"
+  exit 1
+fi
+
+output_file="$1"
+shift
+
+if [ -f "$output_file" ]; then
+  echo "Error: Output file already exists: $output_file"
+  exit 1
+fi
+
+for input_file in "$@"; do
+  if [ ! -f "$input_file" ]; then
+    echo "Error: Input file not found: $input_file"
+    exit 1
+  fi
+done
+
+gs -dBATCH -dNOPAUSE -sDEVICE=pdfwrite -sOutputFile="$output_file" "$@"
