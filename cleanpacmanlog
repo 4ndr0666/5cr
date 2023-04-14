@@ -1,0 +1,74 @@
+#!/usr/bin/perl
+use strict;
+use warnings;
+
+my ($months, $fpath) = @ARGV;
+$months //= 6;
+$fpath //= '/var/log/pacman.log';
+
+my $regex = qr/^\[(\d{4}-\d{2}-\d{2} \d{2}:\d{2})\] (installed|upgraded|removed) (\S+)/;
+
+open(my $fh, '<', $fpath) or die $!;
+
+my %entry_to_msg = ();
+my %pkgname_to_entry = ();
+my $last_timestamp = '';
+my $msg = '';
+
+while (my $line = <$fh>) {
+    if ($line =~ $regex) {
+        $last_timestamp = $1;
+        my ($timestamp, $entry, $pkgname) = ($1, $2, $3);
+
+        if ($entry =~ /^(installed|upgraded|removed)$/) {
+            delete $entry_to_msg{$pkgname_to_entry{$pkgname}} if exists $pkgname_to_entry{$pkgname};
+
+            if ($msg) {
+                $entry_to_msg{$line} = $msg;
+                $pkgname_to_entry{$pkgname} = $line;
+            }
+        }
+
+        $msg = '';
+    } else {
+        $msg .= $line;
+    }
+}
+
+seek($fh, 0, 0);
+$last_timestamp = parse_timestamp($last_timestamp);
+
+my $filter = 1;
+
+while (my $line = <$fh>) {
+    if ($filter) {
+        if ($line =~ $regex) {
+            my ($timestamp, $entry, $pkgname) = ($1, $2, $3);
+            my $keep_msg = keep_message($months, $last_timestamp, parse_timestamp($timestamp));
+            $filter = !$keep_msg;
+
+            if ($entry =~ /^(installed|upgraded)$/ && defined($entry_to_msg{$pkgname_to_entry{$pkgname}})) {
+                print $entry_to_msg{$pkgname_to_entry{$pkgname}};
+            } elsif ($entry eq 'removed' && defined($entry_to_msg{$line}) && $keep_msg) {
+                print $entry_to_msg{$line};
+            }
+
+            print $line;
+        }
+    } else {
+        print $line;
+    }
+}
+
+close $fh;
+
+sub parse_timestamp {
+    my ($timestamp) = @_;
+    return [$timestamp =~ /(\d{4})-(\d{2})-(\d{2}) (\d{2}):(\d{2})/];
+}
+
+sub keep_message {
+    my ($months, $a, $b) = @_;
+    my $dt = ($a->[0] - $b->[0]) * 12 + ($a->[1] - $b->[1]);
+    return $dt < $months || ($dt == $months && $a->[2] <= $b->[2]);
+}
