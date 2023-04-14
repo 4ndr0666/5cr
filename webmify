@@ -1,0 +1,12 @@
+#!/bin/sh
+
+if [ ! -f "$1" ]; then
+  echo "Input file $1 not found"
+  exit 1
+fi
+
+name="$(echo $1 | cut -f1 -d'.')"
+if ! ffmpeg -i "$1" "$name.webm" -loglevel warning -stats; then
+  echo "Conversion failed"
+  exit 1
+fi
