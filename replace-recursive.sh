@@ -1,30 +1,18 @@
 #!/usr/bin/env bash
-#//////////////////////////////////////////////////////////////
-#//   ____                                                   //
-#//  | __ )  ___ _ __  ___ _   _ _ __   ___ _ __ _ __   ___  //
-#//  |  _ \ / _ \ '_ \/ __| | | | '_ \ / _ \ '__| '_ \ / __| //
-#//  | |_) |  __/ | | \__ \ |_| | |_) |  __/ |  | |_) | (__  //
-#//  |____/ \___|_| |_|___/\__,_| .__/ \___|_|  | .__/ \___| //
-#//                             |_|             |_|          //
-#//////////////////////////////////////////////////////////////
-#//                                                          //
-#//  Script, 2021                                            //
-#//  Created: 29, July, 2021                                 //
-#//  Modified: 01, August, 2021                                //
-#//  file: -                                                 //
-#//  -                                                       //
-#//  Source: -                                               //
-#//  OS: ALL                                                 //
-#//  CPU: ALL                                                //
-#//                                                          //
-#//////////////////////////////////////////////////////////////
 
-if (( $# == 3 )); then
-    Var1="$1"
-    Var2="$2"
-    Var3="$3"
-    find . -type f \( -name "*.$Var3" -o -name "*.$Var3" \) -print0 | xargs -0 -P"$(nproc)" -I{} sed -i "s/$Var1/$Var2/g" "{}"
-else
-    echo "Usage: ${0##*/} <STR1> <STR2> <Extension (wihout point)>"
+# This script takes three arguments: STR1, STR2, and the extension (without the dot) of the files to search for.
+# It searches for files with the given extension and replaces all occurrences of STR1 with STR2 using sed.
+
+# Check if the number of arguments is correct
+if (( $# != 3 )); then
+    echo "Usage: ${0##*/} <STR1> <STR2> <extension (without the dot)>"
     exit 1
 fi
+
+# Assign the arguments to variables
+str1="$1"
+str2="$2"
+ext="$3"
+
+# Search for files with the given extension and replace STR1 with STR2 using sed
+find . -type f -name "*.$ext" -print0 | xargs -0 -P "$(nproc)" sed -i "s/$str1/$str2/g"
