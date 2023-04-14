@@ -5,11 +5,14 @@
 
 input_video="$1"
 output_video="$2"
-temp_vpy="temp_video_filter.vpy"
+temp_vpy=$(mktemp)
 
 # Create a temporary VapourSynth script with the input video path
-echo "import sys" > "$temp_vpy"
-echo "sys.argv = [None, '$input_video']" >> "$temp_vpy"
+cat <<EOF > "$temp_vpy"
+import vapoursynth as vs
+core = vs.get_core()
+clip = core.ffms2.Source("$input_video")
+EOF
 cat video_filter.vpy >> "$temp_vpy"
 
 # Debug: Print the content of the temporary VapourSynth script
