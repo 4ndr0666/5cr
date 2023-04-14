@@ -1,15 +1,10 @@
 #!/bin/bash
-#
-#
 
-cd $(dirname $0) 
-source Globalconfig;
+sudo ufw --force reset
+sudo ufw default deny incoming
+sudo ufw default deny outgoing
+sudo ufw enable
 
+notify-send -i $notifyIcon "All Internet traffic is blocked now"
 
-sudo ufw --force reset;
-sudo ufw default deny incoming;
-sudo ufw default deny outgoing;
-sudo ufw enable;
-notify-send -i $notifyIcon "All Internet traffic is blocked now";
-
-exit 1;
+exit 0
