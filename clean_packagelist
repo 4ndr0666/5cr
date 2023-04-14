@@ -1,0 +1,11 @@
+#!/bin/bash
+
+# Read raw package list from standard input
+echo "Please paste the raw package list and press Ctrl-D:"
+raw_packages=$(cat)
+
+# Remove version information from the package list
+cleaned_packages=$(echo "$raw_packages" | sed -E 's/-[0-9][^ ]*//g')
+
+# Install packages using yay
+yay -S --needed --overwrite="*" $cleaned_packages
