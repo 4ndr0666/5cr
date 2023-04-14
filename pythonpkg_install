@@ -1,0 +1,27 @@
+import subprocess
+import sys
+
+def install_package(package):
+    try:
+        subprocess.run([sys.executable, "-m", "pip", "install", package], check=True)
+        print(f"{package} installed successfully!")
+    except subprocess.CalledProcessError as e:
+        if "already exists" in str(e):
+            print(f"Path conflict detected for {package}!")
+            action = input("Choose an action (s: overwrite, i: ignore, w: prompt before overwrite, b: backup before overwrite): ").strip().lower()
+
+            if action in ["s", "i", "w", "b"]:
+                subprocess.run([sys.executable, "-m", "pip", "install", package, f"--exists-action={action}"])
+                print(f"{package} installed with action '{action}'!")
+            else:
+                print("Invalid action. Aborting installation.")
+        else:
+            print(f"Error occurred while installing {package}: {e}")
+            sys.exit(1)
+
+if __name__ == "__main__":
+    if len(sys.argv) > 1:
+        package_name = sys.argv[1]
+        install_package(package_name)
+    else:
+        print("Usage: python install_package.py <package_name>")
