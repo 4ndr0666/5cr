@@ -1,14 +1,14 @@
 #!/bin/bash
-#
-#
-
-#cd $(dirname $0)
-#source Globalconfig;
-
-for intf in /sys/class/net/*; do
-	sudo ifconfig `basename $intf` up
-	notify-send -i $notifyIcon "Bringing $intf up";
-done
-sudo service network-manager restart;
-notify-send -i $notifyIcon "All network devices have been enabled";
-exit 1;
+echo "This will enable NetworkManager"
+sudo systemctl start NetworkManager
+if [ "$?" != "0" ]; then
+	echo "Systemctl failed, trying with service..."
+	sudo service NetworkManager start
+	if [ "$?" != "0" ]; then
+		echo "Everything failed, trying something else..."
+	else
+		echo "Done!"
+	fi
+else
+	echo "Done!"
+fi
