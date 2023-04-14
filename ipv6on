@@ -1,22 +1,3 @@
-#!/bin/bash
-# Script written by Warith Al Maawali  
-# (c) 2022 Founder of Eagle Eye Digital Solutions
-# Discord channel https://discord.gg/KEFErEx
-# Twitter http://twitter.com/warith2020
-# Linkedin http://www.linkedin.com/in/warith1977
-# http://www.digi77.com
-# http://www.om77.net
-# Kodachi  OS/Software/Code are strictly protected by LICENSE terms at /home/kodachi/LICENSE
-#
-#
-# script starts here:
-
-#cd $(dirname $0) 
-#source Globalconfig;
-
-
-
-
 # Check status 
 sysctl -a|grep disable_ipv6
 
@@ -28,20 +9,10 @@ sudo sed -i "/$v1/d" /etc/sysctl.conf
 sudo sed -i "/$v2/d" /etc/sysctl.conf
 sudo sed -i "/$v3/d" /etc/sysctl.conf
 sudo sed -i "/$v4/d" /etc/sysctl.conf
-echo -n "0" > /proc/sys/net/ipv6/conf/all/disable_ipv6;
-sudo sysctl -p;
-# Alternative way but I use both to be sure
-sysctl -w net.ipv6.conf.all.disable_ipv6=0
-sysctl -w net.ipv6.conf.default.disable_ipv6=0
-sudo sysctl -p;
-writeToJason "Yes" "ipv6status";
-notify-send -i $notifyIcon "IPv6 enabled"; 
 
+sudo sysctl -w net.ipv6.conf.all.disable_ipv6=0
+sudo sysctl -w net.ipv6.conf.default.disable_ipv6=0
+sudo sysctl -p;
+
+	
 exit 1
-
-
-
-
-
-
-
