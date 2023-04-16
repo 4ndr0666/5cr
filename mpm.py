@@ -21,77 +21,88 @@ def print_menu():
     print("15. Merge latest installed packages with previous dump")
     print("16. Exit")
 
-def search_package():
-    package_name = input("Enter the name of the package you want to search for: ")
-    result = subprocess.run(['mpm', 'search', package_name], capture_output=True, text=True)
-    print(result.stdout)
+def search(package_name):
+    results = pip.search(package_name)
+    return results
 
-def install_package():
-    package_name = input("Enter the name of the package you want to install: ")
-    result = subprocess.run(['mpm', 'install', package_name], capture_output=True, text=True)
-    print(result.stdout)
+def install(package_name):
+    pip.main(['install', package_name])
 
-def uninstall_package():
-    package_name = input("Enter the name of the package you want to uninstall: ")
-    result = subprocess.run(['mpm', 'uninstall', package_name], capture_output=True, text=True)
-    print(result.stdout)
+def uninstall(package_name):
+    pip.main(['uninstall', '-y', package_name])
 
-def list_installed_packages():
-    result = subprocess.run(['mpm', 'list'], capture_output=True, text=True)
-    print(result.stdout)
+def list_installed():
+    packages = [package.project_name for package in pip.get_installed_distributions()]
+    return sorted(packages)
 
-def list_available_updates():
-    result = subprocess.run(['mpm', 'outdated'], capture_output=True, text=True)
-    print(result.stdout)
+def check_updates():
+    outdated = {}
+    for dist in pip.get_installed_distributions():
+        latest = pip.utils.pypi.get_latest_version(dist.project_name)
+        if dist.version != latest:
+            outdated[dist.project_name] = latest
+    return outdated
 
-def update_package():
-    package_name = input("Enter the name of the package you want to update: ")
-    result = subprocess.run(['mpm', 'update', package_name], capture_output=True, text=True)
-    print(result.stdout)
+def update(package_name):
+    pip.main(['install', '-U', package_name])
 
-def upgrade_all_packages():
-    result = subprocess.run(['mpm', 'update'], capture_output=True, text=True)
-    print(result.stdout)
-
-def xkcd_install():
-    print("This is a joke option from the XKCD comic!")
-    print("Please enter the name of the package you want to 'install':")
-    package_name = input()
-    print(f"{package_name} installed successfully!")
+def upgrade_all():
+    pip.main(['install', '-U', 'pip'])
+    pip.main(['freeze', '--local', '|', 'grep', '-v', '^\-e', '|', 'cut', '-d', '=', '-f 1', '|', 'xargs', '-n1', 'pip', 'install', '-U'])
 
 def pip_upgrade_all():
-    mpm.pip_upgrade_all()
-    print("All pip packages upgraded successfully!")
+    pip.main(['install', '-U', 'pip'])
+    pip.main(['list', '--outdated', '--format=freeze', '|', 'grep', '-v', '^\-e', '|', 'cut', '-d', '=', '-f 1', '|', 'xargs', '-n1', 'pip', 'install', '-U'])
 
-def search_exact():
-    package_name = input("Enter the exact name of the package you want to search for: ")
-    results = mpm.search_exact(package_name)
-    if not results:
-        print(f"No packages found for {package_name}")
-    else:
-        print(f"Found {len(results)} packages for {package_name}:")
-        for package in results:
-            print(f"{package['name']} - {package['description']}")
+def search_exact(package_name):
+    results = pip.search(package_name)
+    exact_matches = [package for package in results if package_name.lower() == package['name'].lower()]
+    return exact_matches
+
+def find_duplicates():
+    packages = pip.get_installed_distributions()
+    package_ids = {}
+    for package in packages:
+        package_id = package.project_name.lower()
+        if package_id in package_ids:
+            package_ids[package_id].append(package.project_name)
+        else:
+            package_ids[package_id] = [package.project_name]
+    duplicate_packages = []
+    for package_id, package_names in package_ids.items():
+        if len(package_names) > 1:
+            duplicate_packages.extend(package_names)
+    return duplicate_packages
 
 def list_duplicates():
-    result = subprocess.run(['mpm', 'list', '--duplicates'], capture_output=True, text=True)
-    print(result.stdout)
+    duplicate_packages = find_duplicates()
+    if not duplicate_packages:
+        print("No packages with duplicate IDs found")
+    else:
+        print("Packages with duplicate IDs:")
+        for package in duplicate_packages:
+            print(package)
 
 def remove_duplicates():
-    result = subprocess.run(['mpm', 'list', '--duplicates'], capture_output=True, text=True)
-    duplicate_packages = result.stdout.strip().split('\n')
-
-    if not duplicate_packages or duplicate_packages == ['']:
+    removed_packages = []
+    package_ids = set()
+    packages = []
+    for package in pip.get_installed_distributions():
+        if package.project_name.lower() not in package_ids:
+            package_ids.add(package.project_name.lower())
+            packages.append(package)
+        else:
+            removed_packages.append(package)
+    pip.main(['uninstall', '-y'] + [package.project_name for package in removed_packages])
+    if not removed_packages:
         print("No packages with duplicate IDs found")
     else:
         print("Packages with duplicate IDs removed:")
-        for package in duplicate_packages:
-            package_name = package.split()[0]  # Extract the package name from the output
-            subprocess.run(['mpm', 'uninstall', package_name], capture_output=True, text=True)
+        for package in removed_packages:
             print(package)
 
 def dump_packages():
-    installed_packages = pkg_resources.working_set
+    installed_packages = pip.get_installed_distributions()
     filename = input("Enter the name of the file to dump the installed packages to (including the extension): ")
     with open(filename, 'w') as f:
         for package in installed_packages:
@@ -107,27 +118,26 @@ def dump_packages():
 def update_dumped_packages():
     filename = input("Enter the name of the file containing the dumped packages (including the extension): ")
     with open(filename, 'r') as f:
-        installed_packages = [json.loads(line.strip()) for line in f]
-    updated_packages = manager.update_packages(installed_packages)
+        installed_packages = [line.strip() for line in f]
+    updated_packages = mpm.update_packages(installed_packages)
     with open(filename, 'w') as f:
         for package in updated_packages:
-            json.dump(package, f)
-            f.write('\n')
+            f.write(f"{package}\n")
     print("Packages updated successfully!")
 
 def merge_packages():
     previous_dump = input("Enter the name of the previous dump file (including the extension): ")
     current_dump = input("Enter the name of the current dump file (including the extension): ")
     with open(previous_dump, 'r') as f:
-        previous_packages = [json.loads(line.strip()) for line in f]
+        previous_packages = [line.strip() for line in f]
     with open(current_dump, 'r') as f:
-        current_packages = [json.loads(line.strip()) for line in f]
+        current_packages = [line.strip() for line in f]
     merged_packages = set(previous_packages).union(set(current_packages))
     with open(current_dump, 'w') as f:
         for package in merged_packages:
-            json.dump(package, f)
-            f.write('\n')
+            f.write(f"{package}\n")
     print("Packages merged successfully!")
+
 
 while True:
     print_menu()
