@@ -98,58 +98,42 @@ def remove_duplicates():
     mpm.remove_duplicates()
     print("Packages with duplicate IDs removed successfully!")
 
-def dump_packages():
-    filename = input("Enter the name of the file to dump the installed packages to (including the extension): ")
-mpm.snapshot(filename)
-print("Installed packages dumped to file successfully!")
-
-def update_dumped_packages():
-filename = input("Enter the name of the file containing the dumped packages (including the extension): ")
-mpm.snapshot_update(filename)
-print("Dumped packages updated to latest version successfully!")
-
-def merge_packages():
-filename = input("Enter the name of the file containing the dumped packages (including the extension): ")
-mpm.snapshot_merge(filename)
-print("Latest installed packages merged with previous dump successfully!")
-
 while True:
-print_menu()
-choice = input("Enter your choice: ")
-
-if choice == '1':
-    search_package()
-elif choice == '2':
-    install_package()
-elif choice == '3':
-    uninstall_package()
-elif choice == '4':
-    list_installed_packages()
-elif choice == '5':
-    list_available_updates()
-elif choice == '6':
-    update_package()
-elif choice == '7':
-    upgrade_all_packages()
-elif choice == '8':
-    xkcd_install()
-elif choice == '9':
-    pip_upgrade_all()
-elif choice == '10':
-    search_exact()
-elif choice == '11':
-    list_duplicates()
-elif choice == '12':
-    remove_duplicates()
-elif choice == '13':
-    dump_packages()
-elif choice == '14':
-    update_dumped_packages()
-elif choice == '15':
-    merge_packages()
-elif choice == '16':
-    print("Exiting...")
-    break
-else:
-    print("Invalid choice. Please try again.")
-
+    print_menu()
+    choice = input("Enter your choice: ")
+    if choice == '1':
+        search_package()
+    elif choice == '2':
+        install_package()
+    elif choice == '3':
+        uninstall_package()
+    elif choice == '4':
+        list_installed_packages()
+    elif choice == '5':
+        list_available_updates()
+    elif choice == '6':
+        update_package()
+    elif choice == '7':
+        upgrade_all_packages()
+    elif choice == '8':
+        xkcd_install()
+    elif choice == '9':
+        pip_upgrade_all()
+    elif choice == '10':
+        search_exact()
+    elif choice == '11':
+        list_duplicates()
+    elif choice == '12':
+        remove_duplicates()
+    elif choice == '13':
+        dump_packages()
+    elif choice == '14':
+        update_dumped_packages()
+    elif choice == '15':
+        merge_packages()
+    elif choice == '16':
+        print("Exiting...")
+        break
+    else:
+        print("Invalid choice. Please try again.")
+    
