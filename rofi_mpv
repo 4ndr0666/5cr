@@ -1,24 +1,26 @@
 #!/usr/bin/env bash
 
+## Copyright (C) 2020-2022 Aditya Shakya <adi1090x@gmail.com>
+
 # Import Current Theme
 DIR="$HOME/.config/bspwm"
 STYLE="adaptive"
 RASI="$DIR/themes/$STYLE/rofi/music.rasi"
 
 # Theme Elements
-status="`mpv-ipc status`"
+status="`./mpv-ipc get_property pause`"
 if [[ -z "$status" ]]; then
 	prompt='Offline'
 	mesg="MPV is Offline"
 else
-	prompt="`mpv-ipc -f "%{media-title}" current`"
-	mesg="`mpv-ipc -f "%{media-title}" current` :: `mpv-ipc status | grep "#" | awk '{print $3}'`"
+	prompt="`./mpv-ipc get_property media-title`"
+	mesg="`./mpv-ipc get_property media-title`"
 fi
 
 # Options
 layout=`cat ${RASI} | grep 'USE_ICON' | cut -d'=' -f2`
 if [[ "$layout" == 'NO' ]]; then
-	if [[ ${status} == *"[playing]"* ]]; then
+	if [[ ${status} == *'"data":false'* ]]; then
 		option_1=" Pause"
 	else
 		option_1=" Play"
@@ -29,7 +31,7 @@ if [[ "$layout" == 'NO' ]]; then
 	option_5=" Repeat"
 	option_6=" Random"
 else
-	if [[ ${status} == *"[playing]"* ]]; then
+	if [[ ${status} == *'"data":false'* ]]; then
 		option_1=""
 	else
 		option_1=""
@@ -45,20 +47,13 @@ fi
 active=''
 urgent=''
 # Repeat
-if [[ ${status} == *"repeat: on"* ]]; then
+repeat_status="`./mpv-ipc get_property loop-file`"
+if [[ ${repeat_status} == *"\"data\":true"* ]]; then
     active="-a 4"
-elif [[ ${status} == *"repeat: off"* ]]; then
+elif [[ ${repeat_status} == *"\"data\":false"* ]]; then
     urgent="-u 4"
 else
     option_5=" Parsing Error"
-fi
-# Random
-if [[ ${status} == *"random: on"* ]]; then
-    [ -n "$active" ] && active+=",5" || active="-a 5"
-elif [[ ${status} == *"random: off"* ]]; then
-    [ -n "$urgent" ] && urgent+=",5" || urgent="-u 5"
-else
-    option_6=" Parsing Error"
 fi
 
 # Rofi CMD
@@ -79,39 +74,40 @@ run_rofi() {
 # Execute Command
 run_cmd() {
 	if [[ "$1" == '--opt1' ]]; then
-		mpv-ipc -q toggle
+		./mpv-ipc toggle_pause
 	elif [[ "$1" == '--opt2' ]]; then
-		mpv-ipc -q stop
+		./mpv-ipc stop
 	elif [[ "$1" == '--opt3' ]]; then
-		mpv-ipc -q prev
+		./mpv-ipc playlist_prev
 	elif [[ "$1" == '--opt4' ]]; then
-		mpv-ipc -q next
+		./mpv-ipc playlist_next
 	elif [[ "$1" == '--opt5' ]]; then
-		mpv-ipc -q repeat
-  elif [[ "$1" == '--opt6' ]]; then
-   mpv-ipc -q random
- fi
+		./mpv-ipc toggle_repeat
+	elif [[ "$1" == '--opt6' ]]; then
+		./mpv-ipc toggle_shuffle
+	fi
 }
 
-Actions
+# Actions
 chosen="$(run_rofi)"
 case ${chosen} in
-$option_1)
-run_cmd --opt1
-;;
-$option_2)
-run_cmd --opt2
-;;
-$option_3)
-run_cmd --opt3
-;;
-$option_4)
-run_cmd --opt4
-;;
-$option_5)
-run_cmd --opt5
-;;
-$option_6)
-run_cmd --opt6
-;;
+    $option_1)
+		run_cmd --opt1
+        ;;
+    $option_2)
+		run_cmd --opt2
+        ;;
+    $option_3)
+		run_cmd --opt3
+        ;;
+    $option_4)
+		run_cmd --opt4
+        ;;
+    $option_5)
+		run_cmd --opt5
+        ;;
+    $option_6)
+		run_cmd --opt6
+        ;;
 esac
+
