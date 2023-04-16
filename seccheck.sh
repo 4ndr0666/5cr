@@ -96,9 +96,35 @@ file_permissions=(
   "/etc/gshadow"
   "/etc/sudoers"
   "/etc/ssh/sshd_config"
+  "/etc/ssh/ssh_config"
+  "/etc/pam.d"
+  "/etc/security"
+  "/etc/sysctl.conf"
+  "/etc/hosts"
+  "/etc/hostname"
+  "/etc/fstab"
+  "/etc/crontab"
+  "/etc/cron.d"
+  "/etc/cron.daily"
+  "/etc/cron.hourly"
+  "/etc/cron.monthly"
+  "/etc/cron.weekly"
+  "/var/spool/cron/crontabs"
+  "/var/log/auth.log"
+  "/var/log/secure"
+  "/var/log/syslog"
+  "/var/log/messages"
+  "/var/log/wtmp"
+  "/var/log/lastlog"
+  "/var/log/btmp"
+  "/var/log/faillog"
 )
 for file in "${file_permissions[@]}"; do
-  echo -e "[$(stat -c '%a' "${file}")] $file" | tee -a "${output_file}"
+  if [ -e "${file}" ]; then
+    echo -e "[$(stat -c '%a' "${file}")] $file" | tee -a "${output_file}"
+  else
+    echo -e " [-] $file not found" | tee -a "${output_file}"
+  fi
 done
 
 header "SUID and SGID Checks"
