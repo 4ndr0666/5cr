@@ -23,11 +23,26 @@ if len(sys.argv) < 2:
     print("Usage: mpv-ipc command [param]")
     sys.exit(1)
 
-command = sys.argv[1]
+custom_command = sys.argv[1]
 param = sys.argv[2] if len(sys.argv) > 2 else None
-response = send_command(command, param)
 
-if "error" in response and response["error"] != "success":
-    print("Error:", response["error"])
+# Map custom commands to MPV commands
+command_map = {
+    "toggle_pause": "cycle pause",
+    "stop": "stop",
+    "playlist_prev": "playlist-prev",
+    "playlist_next": "playlist-next",
+    "toggle_repeat": "cycle-values loop-file true false",
+    "toggle_shuffle": "cycle-values shuffle true false"
+}
+
+mpv_command = command_map.get(custom_command)
+
+if mpv_command:
+    response = send_command(mpv_command, param)
+    if "error" in response and response["error"] != "success":
+        print("Error:", response["error"])
+    else:
+        print(response.get("data", ""))
 else:
-    print(response.get("data", ""))
+    print(f"Unknown command: {custom_command}")
