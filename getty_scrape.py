@@ -10,15 +10,15 @@ from urllib.parse import urljoin
 
 # Constants
 GETTY_IMAGES_URL = "https://www.gettyimages.com/"
-TIMEOUT = 30
+TIMEOUT = 60
 SCROLL_PAUSE_TIME = 2
 
 def get_image_urls(driver, search_url, num_pages):
     driver.get(search_url)
 
-    # Wait for the images to load
+  # Wait for the images to load
     WebDriverWait(driver, TIMEOUT).until(
-        EC.presence_of_element_located((By.CSS_SELECTOR, "img.gallery-asset__thumb"))
+        EC.presence_of_element_located((By.CSS_SELECTOR, "img.MosaicAsset-module__thumb___yvFP5"))
     )
 
     image_urls = []
