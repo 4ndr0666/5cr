@@ -1,4 +1,5 @@
 import mpm
+import pkg_resources
 
 def print_menu():
     print("1. Search for a package")
@@ -85,8 +86,15 @@ def search_exact():
         for package in results:
             print(f"{package['name']} - {package['description']}")
 
+
+def find_duplicates():
+    packages = pkg_resources.working_set
+    package_ids = [f"{p.project_name}=={p.version}" for p in packages]
+    duplicate_ids = set([x for x in package_ids if package_ids.count(x) > 1])
+    return duplicate_ids
+
 def list_duplicates():
-    duplicate_packages = mpm.list_duplicates()
+    duplicate_packages = find_duplicates()
     if not duplicate_packages:
         print("No packages with duplicate IDs found")
     else:
@@ -95,11 +103,63 @@ def list_duplicates():
             print(package)
 
 def remove_duplicates():
-    mpm.remove_duplicates()
-    print("Packages with duplicate IDs removed successfully!")
+    removed_packages = []
+    package_ids = set()
+    packages = []
+    for package in pip.get_installed_distributions():
+        if package.project_name.lower() not in package_ids:
+            package_ids.add(package.project_name.lower())
+            packages.append(package)
+        else:
+            removed_packages.append(package)
+    pip.main(['uninstall', '-y'] + [package.project_name for package in removed_packages])
+    if not removed_packages:
+        print("No packages with duplicate IDs found")
+    else:
+        print("Packages with duplicate IDs removed:")
+        for package in removed_packages:
+            print(package)
+
+def dump_packages():
+    installed_packages = pip.get_installed_distributions()
+    filename = input("Enter the name of the file to dump the installed packages to (including the extension): ")
+    with open(filename, 'w') as f:
+        for package in installed_packages:
+            package_info = {
+                "name": package.project_name,
+                "version": package.version,
+                "location": package.location
+            }
+            json.dump(package_info, f)
+            f.write('\n')
+    print(f"Installed packages dumped to {filename} successfully!")
+
+def update_dumped_packages():
+    filename = input("Enter the name of the file containing the dumped packages (including the extension): ")
+    with open(filename, 'r') as f:
+        installed_packages = [line.strip() for line in f]
+    updated_packages = mpm.update_packages(installed_packages)
+    with open(filename, 'w') as f:
+        for package in updated_packages:
+            f.write(f"{package}\n")
+    print("Packages updated successfully!")
+
+def merge_packages():
+    previous_dump = input("Enter the name of the previous dump file (including the extension): ")
+    current_dump = input("Enter the name of the current dump file (including the extension): ")
+    with open(previous_dump, 'r') as f:
+        previous_packages = [line.strip() for line in f]
+    with open(current_dump, 'r') as f:
+        current_packages = [line.strip() for line in f]
+    merged_packages = set(previous_packages).union(set(current_packages))
+    with open(current_dump, 'w') as f:
+        for package in merged_packages:
+            f.write(f"{package}\n")
+    print("Packages merged successfully!")
 
 while True:
     print_menu()
+
     choice = input("Enter your choice: ")
     if choice == '1':
         search_package()
