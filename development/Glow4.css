@@ -1,0 +1,100 @@
+/* Panel with rounded corners */
+.panel-rounded {
+    border-radius: 8px;
+}
+
+.panel-rounded .panel-header,
+.panel-rounded .panel-content,
+.panel-rounded .panel-footer {
+    border-radius: 0;
+}
+
+.panel-rounded .panel-header {
+    border-top-left-radius: 8px;
+    border-top-right-radius: 8px;
+}
+
+.panel-rounded .panel-footer {
+    border-bottom-left-radius: 8px;
+    border-bottom-right-radius: 8px;
+}
+
+/* Panel with shadow */
+.panel-shadow {
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1), 0 2px 4px rgba(0, 0, 0, 0.06);
+}
+
+/* Panel with gradient background */
+.panel-gradient {
+    background-image: linear-gradient(to bottom right, #1e3c72, #2a5298);
+}
+
+.panel-gradient .panel-header,
+.panel-gradient .panel-content,
+.panel-gradient .panel-footer {
+    color: #fff;
+}
+
+/* Panel with stripes */
+.panel-stripes {
+    background-image: linear-gradient(45deg, rgba(255, 255, 255, 0.1) 25%, transparent 25%, transparent 50%, rgba(255, 255, 255, 0.1) 50%, rgba(255, 255, 255, 0.1) 75%, transparent 75%, transparent);
+    background-size: 40px 40px;
+}
+
+/* Panel with badge */
+.panel-badge {
+    position: relative;
+}
+
+.panel-badge:after {
+    content: attr(data-badge);
+    position: absolute;
+    top: -10px;
+    right: -10px;
+    padding: 5px 10px;
+    border-radius: 50%;
+    background-color: #f44336;
+    color: #fff;
+    font-size: 14px;
+    font-weight: bold;
+    z-index: 1;
+}
+
+/* Panel with vertical separator */
+.panel-vertical-separator .panel-content {
+    display: flex;
+    border-left: 1px solid rgba(255, 255, 255, 0.1);
+    border-right: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.panel-vertical-separator .panel-column {
+    flex: 1;
+    padding: 20px;
+    border-left: 1px solid rgba(0, 0, 0, 0.1);
+    border-right: 1px solid rgba(0, 0, 0, 0.1);
+}
+
+.panel-vertical-separator .panel-column:first-child {
+    border-left: none;
+}
+
+.panel-vertical-separator .panel-column:last-child {
+    border-right: none;
+}
+
+/* Responsive styles */
+@media (max-width: 767px) {
+    .panel-vertical-separator .panel-content {
+        flex-direction: column;
+    }
+    
+    .panel-vertical-separator .panel-column {
+        border-left: none;
+        border-right: none;
+        border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+    }
+    
+    .panel-vertical-separator .panel-column:last-child {
+        border-bottom: none;
+    }
+}
