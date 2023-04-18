@@ -1,0 +1,94 @@
+/* Panel with horizontal separator */
+.panel-horizontal-separator .panel-content {
+    display: flex;
+    flex-direction: column;
+}
+
+.panel-horizontal-separator .panel-row {
+    width: 100%;
+    padding: 20px;
+    border-top: 1px solid rgba(0, 0, 0, 0.1);
+    border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+}
+
+.panel-horizontal-separator .panel-row:first-child {
+    border-top: none;
+}
+
+.panel-horizontal-separator .panel-row:last-child {
+    border-bottom: none;
+}
+
+/* Panel with header icon */
+.panel-header-icon .panel-header:before {
+    content: '';
+    display: inline-block;
+    width: 24px;
+    height: 24px;
+    margin-right: 8px;
+    vertical-align: middle;
+    background-repeat: no-repeat;
+    background-size: contain;
+}
+
+.panel-header-icon.panel-info .panel-header:before {
+    background-image: url('path/to/info-icon.png');
+}
+
+.panel-header-icon.panel-warning .panel-header:before {
+    background-image: url('path/to/warning-icon.png');
+}
+
+.panel-header-icon.panel-danger .panel-header:before {
+    background-image: url('path/to/danger-icon.png');
+}
+
+.panel-header-icon.panel-success .panel-header:before {
+    background-image: url('path/to/success-icon.png');
+}
+
+/* Panel with collapsible content */
+.panel-collapsible .panel-content {
+    max-height: 0;
+    overflow: hidden;
+    transition: max-height 0.4s ease;
+}
+
+.panel-collapsible.active .panel-content {
+    max-height: 1000px;
+}
+
+.panel-collapsible .panel-footer {
+    cursor: pointer;
+}
+
+.panel-collapsible .panel-footer:before {
+    content: '+';
+    display: inline-block;
+    margin-right: 8px;
+}
+
+.panel-collapsible.active .panel-footer:before {
+    content: '-';
+}
+
+/* Panel with hover effect */
+.panel-hover:hover {
+    background-color: rgba(255, 255, 255, 0.1);
+}
+
+/* Panel with overlay */
+.panel-overlay {
+    position: relative;
+}
+
+.panel-overlay:after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: rgba(0, 0, 0, 0.1);
+    z-index: 1;
+}
