@@ -1,0 +1,112 @@
+/* Panel with icon */
+.panel-icon {
+    position: relative;
+}
+
+.panel-icon:before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 40px;
+    height: 40px;
+    background-size: contain;
+    background-repeat: no-repeat;
+    background-position: center;
+    opacity: 0.7;
+}
+
+.panel-accent.panel-icon:before {
+    background-image: url('path/to/accent-icon.svg');
+}
+
+.panel-success.panel-icon:before {
+    background-image: url('path/to/success-icon.svg');
+}
+
+.panel-warning.panel-icon:before {
+    background-image: url('path/to/warning-icon.svg');
+}
+
+.panel-danger.panel-icon:before {
+    background-image: url('path/to/danger-icon.svg');
+}
+
+.panel-info.panel-icon:before {
+    background-image: url('path/to/info-icon.svg');
+}
+
+/* Panel with image background */
+.panel-image {
+    position: relative;
+    background-size: cover;
+    background-position: center;
+}
+
+.panel-image:before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: rgba(0, 0, 0, 0.4);
+    backdrop-filter: blur(10px);
+}
+
+.panel-image .panel-header,
+.panel-image .panel-content,
+.panel-image .panel-footer {
+    position: relative;
+    z-index: 1;
+}
+
+/* Panel with hover effect */
+.panel-hover:hover {
+    box-shadow: 0 8px 12px rgba(0, 0, 0, 0.15), 0 3px 5px rgba(0, 0, 0, 0.1);
+    transform: translateY(-3px);
+    transition: box-shadow 0.3s, transform 0.3s;
+}
+
+/* Panel with collapsible content */
+.panel-collapsible .panel-content {
+    max-height: 0;
+    overflow: hidden;
+    transition: max-height 0.3s;
+}
+
+.panel-collapsible.active .panel-content {
+    max-height: 1000px;
+}
+
+.panel-collapsible .panel-header {
+    cursor: pointer;
+}
+
+.panel-collapsible .panel-header:after {
+    content: '▼';
+    position: absolute;
+    top: 50%;
+    right: 0;
+    transform: translateY(-50%);
+    transition: transform 0.3s;
+}
+
+.panel-collapsible.active .panel-header:after {
+    transform: translateY(-50%) rotate(180deg);
+}
+
+/* Responsive styles */
+@media (max-width: 767px) {
+    .panel-icon:before {
+        width: 30px;
+        height: 30px;
+    }
+}
+
+@media (max-width: 480px) {
+    .panel-icon:before {
+        width: 20px;
+        height: 20px;
+    }
+}
