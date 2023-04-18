@@ -1,0 +1,156 @@
+/* ==UserStyle==
+@name           SaberGlass for Reddit
+@namespace      USO Archive
+@author         4ndr0666
+@description    `ChatGPT css adapted for Reddit`
+@version        1.0
+@license        MIT
+@preprocessor   uso
+@advanced dropdown BGRND "Background Image" https://wallpapercave.com/wp/wp2071799.jpg "
+@advanced dropdown FROST "Playground Glass finish" {
+    SFG "Small Frost Grain*" <<<EOT background-image: url(https://i.imgur.com/gGI11AA.png);
+    background-size: 211px; EOT;
+    LFG "Large Frost Grain" <<<EOT     background-image: url(https://i.imgur.com/gGI11AA.png);
+    background-size: 344px; EOT;
+    NFG "Smooth - No Frost Grain" <<<EOT  EOT;
+
+}
+@advanced dropdown GPTC Theme Color"Default Teal"
+
+==/UserStyle== */
+
+@-moz-document domain("reddit.com"), domain("old.reddit.com") {
+  /* Background */
+  body, .md {
+    background-image: url("/*[[BGRND]]*/");
+    background-size: cover;
+    background-position-x: center;
+  }
+
+  /* Header */
+  #header, #sr-header-area, .tabmenu {
+    background-color: #0000004f;
+    backdrop-filter: blur(80px);
+    border: 1px solid #ffffff21;
+    /*[[FROST]]*/
+  }
+
+  /* Sidebars */
+  .side, .side:before, .side .titlebox, .side .spacer, .side .morelink {
+    background-color: rgba(0, 0, 0, 0.4);
+    backdrop-filter: blur(10px);
+  }
+
+  /* Post containers */
+  .thing, .thing .entry, .thing .entry .md, .link .entry {
+    background-color: rgba(255, 255, 255, 0.19);
+    border: 1px solid var(--gray-300);
+    border-radius: 1em;
+  }
+
+  /* Titles and texts */
+  .thing .title, .thing .entry .md p, .thing .entry .md a, .thing .entry .md blockquote, .thing .entry .md h1, .thing .entry .md h2, .thing .entry .md h3, .thing .entry .md h4, .thing .entry .md h5, .thing .entry .md h6, .side h1, .side h2, .side h3, .side h4, .side h5, .side h6, .side a, .side p, .side blockquote {
+    color: #ffffff;
+  }
+
+  /* Buttons and links */
+  .thing .entry .buttons li a, .side .submit .morelink, .side .submit .morelink a, .morelink {
+    background-color: rgba(255, 255, 255, 0.19);
+    border-radius: 1em;
+    color: #ffffff;
+  }
+
+  /* Text input fields */
+  .md textarea {
+    background-color: rgba(255, 255, 255, 0.19);
+    border: 1px solid var(--gray-300);
+border-radius: 1em;
+color: #ffffff;
+}
+
+/* reddit.com /
+/ Main post container */
+.Post {
+background-color: rgba(255, 255, 255, 0.19);
+border-radius: 1em;
+border: 1px solid var(--gray-300);
+}
+
+/* Header /
+.hc6JfgV7yC9WkXv7BnfgJ {
+background-color: #0000004f;
+backdrop-filter: blur(80px);
+border: 1px solid #ffffff21;
+/[[FROST]]*/
+}
+
+/* Sidebars */
+.CommunityInfo, .TopPosts {
+background-color: rgba(0, 0, 0, 0.4);
+backdrop-filter: blur(10px);
+}
+
+/* Titles and texts */
+.Post .y8HYJ-y_lTUHkQIc1mdCq {
+color: #ffffff;
+}
+
+/* Buttons and links */
+.Post .kFZaavRVBjFpYwJ3n1q3B, .CommunityInfo .kFZaavRVBjFpYwJ3n1q3B {
+background-color: rgba(255, 255, 255, 0.19);
+border-radius: 1em;
+color: #ffffff;
+}
+
+/* Text input fields */
+.F4EUX4ysu2Qjx_K7SJU6h {
+background-color: rgba(255, 255, 255, 0.19);
+border: 1px solid var(--gray-300);
+border-radius: 1em;
+color: #ffffff;
+}
+
+/* old.reddit.com /
+/ Main post container */
+.link {
+background-color: rgba(255, 255, 255, 0.19);
+border-radius: 1em;
+border: 1px solid var(--gray-300);
+}
+
+/* Header /
+#header {
+background-color: #0000004f;
+backdrop-filter: blur(80px);
+border: 1px solid #ffffff21;
+/[[FROST]]*/
+}
+
+/* Sidebars */
+.side {
+background-color: rgba(0, 0, 0, 0.4);
+backdrop-filter: blur(10px);
+}
+
+/* Titles and texts */
+.link .title {
+color: #ffffff;
+}
+
+/* Buttons and links */
+.link .buttons li a, .side .submit .morelink, .side .submit .morelink a, .morelink {
+background-color: rgba(255, 255, 255, 0.19);
+border-radius: 1em;
+color: #ffffff;
+}
+
+/* Text input fields */
+.md textarea {
+background-color: rgba(255, 255, 255, 0.19);
+border: 1px solid var(--gray-300);
+border-radius: 1em;
+color: #ffffff;
+}
+}
+
+
