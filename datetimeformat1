@@ -1,0 +1,107 @@
+#!/bin/bash
+
+# Prompt user for custom date format
+echo "Please enter your custom date format (e.g. %m/%d/%Y):"
+read custom_format
+
+# Prompt user to select from pre-defined format strings
+echo "Please select from the following pre-defined date format strings:"
+echo "1. %a %b %e %H:%M:%S %Z %Y"
+echo "2. %A, %B %d, %Y %H:%M:%S"
+echo "3. %Y-%m-%d %H:%M:%S"
+echo "4. %D"
+echo "5. %F"
+echo "6. %T"
+echo "7. %c"
+echo "8. %x"
+echo "9. %X"
+echo "10. %r"
+echo "11. %R"
+echo "12. %z"
+echo "13. %s"
+echo "14. %n"
+echo "15. %t"
+echo "16. %y"
+echo "17. %j"
+echo "18. %U"
+echo "19. %W"
+echo "20. %w"
+echo "21. %p"
+
+read -p "Selection: " choice
+
+case $choice in
+    1)
+        format="%a %b %e %H:%M:%S %Z %Y"
+        ;;
+    2)
+        format="%A, %B %d, %Y %H:%M:%S"
+        ;;
+    3)
+        format="%Y-%m-%d %H:%M:%S"
+        ;;
+    4)
+        format="%D"
+        ;;
+    5)
+        format="%F"
+        ;;
+    6)
+        format="%T"
+        ;;
+    7)
+        format="%c"
+        ;;
+    8)
+        format="%x"
+        ;;
+    9)
+        format="%X"
+        ;;
+    10)
+        format="%r"
+        ;;
+    11)
+        format="%R"
+        ;;
+    12)
+        format="%z"
+        ;;
+    13)
+        format="%s"
+        ;;
+    14)
+        format="%n"
+        ;;
+    15)
+        format="%t"
+        ;;
+    16)
+        format="%y"
+        ;;
+    17)
+        format="%j"
+        ;;
+    18)
+        format="%U"
+        ;;
+    19)
+        format="%W"
+        ;;
+    20)
+        format="%w"
+        ;;
+    21)
+        format="%p"
+        ;;
+    *)
+        echo "Invalid choice."
+        exit 1
+esac
+
+# Combine custom format with selected format
+final_format=$(date +$format' '$custom_format)
+
+# Output final format
+echo "Your custom date format is:"
+echo "$final_format"
