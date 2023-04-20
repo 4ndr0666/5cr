@@ -1,0 +1,71 @@
+#!/bin/bash
+
+# Define an associative array of date format strings
+declare -A date_formats=(
+    [1]="%a, %d %b %Y %H:%M:%S %Z"
+    [2]="%Y-%m-%d %H:%M:%S"
+    [3]="%d/%m/%Y %H:%M:%S"
+    [4]="%m/%d/%Y %H:%M:%S"
+    [5]="%H:%M:%S %Z"
+    [6]="%H:%M:%S"
+    [7]="%d %b %Y %H:%M:%S %Z"
+    [8]="%Y-%m-%d"
+    [9]="%d/%m/%Y"
+    [10]="%m/%d/%Y"
+)
+
+# Prompt the user to select a format
+echo "Please select a date format:"
+for key in "${!date_formats[@]}"; do
+    echo "$key) ${date_formats[$key]}"
+done
+read -p "Enter selection: " selection
+
+# Validate the user's selection
+if ! [[ "${date_formats[$selection]+exists}" ]]; then
+    echo "Invalid selection."
+    exit 1
+fi
+
+# Prompt the user to select additional time elements
+echo "Do you want to add any time elements? (y/n)"
+read -r response
+if [[ "$response" =~ ^([yY][eE][sS]|[yY])$ ]]; then
+    time_format=""
+    while true; do
+        echo "Please select a time element to add:"
+        echo "1) Hour (12-hour format, leading zero)"
+        echo "2) Hour (12-hour format, no leading zero)"
+        echo "3) Hour (24-hour format, leading zero)"
+        echo "4) Hour (24-hour format, no leading zero)"
+        echo "5) Minute (leading zero)"
+        echo "6) Minute (no leading zero)"
+        echo "7) Second (leading zero)"
+        echo "8) Second (no leading zero)"
+        echo "9) AM/PM"
+        echo "0) Finish"
+        read -p "Enter selection: " selection
+        case $selection in
+            1) time_format+="%I:";;
+            2) time_format+="%l:";;
+            3) time_format+="%H:";;
+            4) time_format+="%k:";;
+            5) time_format+="%M:";;
+            6) time_format+="%S:";;
+            7) time_format+="%S:";;
+            8) time_format+="%s:";;
+            9) time_format+="%p ";;
+            0) break;;
+            *) echo "Invalid selection.";;
+        esac
+    done
+fi
+
+# Construct the final date format string
+if [[ -n "$time_format" ]]; then
+    echo "Your custom date format is:"
+    echo "${date_formats[$selection]} $time_format"
+else
+    echo "Your custom date format is:"
+    echo "${date_formats[$selection]}"
+fi
