@@ -46,6 +46,10 @@ def merge_dump(args):
 def doctor(args):
     subprocess.run(["mpm", "doctor"])
 
+# Global defiition of 'parser' keeping the 'main()' function.
+    parser = argparse.ArgumentParser(description="Wrapper for the Meta Package Manager (mpm)", add_help=False)
+    subparsers = parser.add_subparsers()
+
 def print_menu():
     print("\nMenu:")
     print("1. Search for a package")
@@ -65,8 +69,7 @@ def print_menu():
     print("15. Merge latest installed packages with previous dump")
     print("16. Run the doctor command in mpm")
     print("17. Exit")
-
-
+    
 def main():
     parser = argparse.ArgumentParser(description="Wrapper for the Meta Package Manager (mpm)")
     subparsers = parser.add_subparsers()
@@ -157,8 +160,8 @@ def main():
     parser_doctor = subparsers.add_parser("doctor", help="Run the doctor command in mpm (example: 'mpm.py doctor')")
     parser_doctor.set_defaults(func=doctor)
 
-
-while True:
+def main():
+    while True:
         print_menu()
         choice = input("Enter your choice: ")
         try:
@@ -173,3 +176,7 @@ while True:
 
 if __name__ == "__main__":
     main()
+
+
+    
+    
