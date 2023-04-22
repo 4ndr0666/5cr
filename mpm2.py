@@ -1,3 +1,4 @@
+from meta_package_manager.meta_package_manager import MetaPackageManager
 import json
 import subprocess
 import pkg_resources
@@ -21,15 +22,32 @@ def print_menu():
     print("15. Merge latest installed packages with previous dump")
     print("16. Exit")
 
+def main():
+    # ... other subparsers ...
+    parser_outdated = subparsers.add_parser("outdated", help="List outdated packages")
+    parser_outdated.set_defaults(func=outdated_packages)
+    # ... rest of the main function ...
+
+def outdated_packages(args):
+    mpm = MetaPackageManager()
+    outdated = mpm.outdated()
+    for package in outdated:
+        print(f"{package.manager} - {package.name} - {package.installed_version} -> {package.latest_version}")
+
 def search_package():
     package_name = input("Enter the name of the package you want to search for: ")
     result = subprocess.run(['mpm', 'search', package_name], capture_output=True, text=True)
     print(result.stdout)
 
-def install_package():
-    package_name = input("Enter the name of the package you want to install: ")
-    result = subprocess.run(['mpm', 'install', package_name], capture_output=True, text=True)
-    print(result.stdout)
+def list_installed(args):
+    mpm = MetaPackageManager()
+    installed = mpm.list()
+    for manager, packages in installed.items():
+        print(f"{manager}:")
+        for package in packages:
+            print(f"  {package.name} - {package.installed_version}")
+        print()
+
 
 def uninstall_package():
     package_name = input("Enter the name of the package you want to uninstall: ")
