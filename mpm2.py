@@ -1,4 +1,4 @@
-from meta_package_manager.meta_package_manager import MetaPackageManager
+from meta_package_manager import MetaPackageManager
 import json
 import subprocess
 import pkg_resources
