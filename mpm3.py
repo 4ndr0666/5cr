@@ -1,8 +1,47 @@
 import argparse
 import subprocess
-import json
 import os
+import json
 
+# Define your functions here, for example:
+def search_package(args):
+    pass
+
+def install_package(args):
+    pass
+
+def uninstall_package(args):
+    pass
+
+def list_installed(args):
+    pass
+
+def list_updates(args):
+    pass
+
+def update_package(args):
+    pass
+
+def upgrade_all(args):
+    pass
+
+def upgrade_pip(args):
+    pass
+
+def list_duplicates(args):
+    pass
+
+def remove_duplicates(args):
+    pass
+
+def dump_packages(args):
+    pass
+
+def update_dumped_packages(args):
+    pass
+
+def merge_dump(args):
+    pass
 
 def main():
     parser = argparse.ArgumentParser(description="Wrapper for the Meta Package Manager (mpm)")
@@ -90,10 +129,13 @@ def main():
     parser_merge_dump.add_argument("file_path", help="Path to the file containing the previous dumped packages")
     parser_merge_dump.set_defaults(func=merge_dump)
 
-    args = parser.parse_args()
+     args = parser.parse_args()
 
     if hasattr(args, 'func'):
         args.func(args)
     else:
         parser.print_help()
         exit(1)
+
+if __name__ == "__main__":
+    main()
