@@ -43,6 +43,10 @@ def update_dumped_packages(args):
 def merge_dump(args):
     pass
 
+def doctor(args):
+    subprocess.run(["mpm", "doctor"])
+
+
 def main():
     parser = argparse.ArgumentParser(description="Wrapper for the Meta Package Manager (mpm)")
     subparsers = parser.add_subparsers()
@@ -129,13 +133,23 @@ def main():
     parser_merge_dump.add_argument("file_path", help="Path to the file containing the previous dumped packages")
     parser_merge_dump.set_defaults(func=merge_dump)
 
-     args = parser.parse_args()
+    # 16. Doctor for mpm 
+    parser_doctor = subparsers.add_parser("doctor", help="Run the doctor command in mpm (example: 'mpm.py doctor')")
+    parser_doctor.set_defaults(func=doctor)
 
-    if hasattr(args, 'func'):
-        args.func(args)
-    else:
-        parser.print_help()
-        exit(1)
+
+      while True:
+        print_menu()
+        choice = input("Enter your choice: ")
+        try:
+            args = parser.parse_args(choice.split())
+            if hasattr(args, 'func'):
+                args.func(args)
+            else:
+                print("Invalid choice, please try again.")
+        except SystemExit:
+            # argparse.ArgumentParser raises SystemExit on error or --help. We need to catch it to keep the loop running.
+            continue
 
 if __name__ == "__main__":
     main()
