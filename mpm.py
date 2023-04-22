@@ -1,9 +1,12 @@
 import json
+import os
+import sys
 import subprocess
 import pkg_resources
 import pip
 
 def print_menu():
+    print("Menu")
     print("1. Search for a package")
     print("2. Install a package")
     print("3. Uninstall a package")
