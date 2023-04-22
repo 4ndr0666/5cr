@@ -46,6 +46,26 @@ def merge_dump(args):
 def doctor(args):
     subprocess.run(["mpm", "doctor"])
 
+def print_menu():
+    print("\nMenu:")
+    print("1. Search for a package")
+    print("2. Install a package")
+    print("3. Uninstall a package")
+    print("4. List installed packages")
+    print("5. List available updates")
+    print("6. Update a package")
+    print("7. Upgrade all packages")
+    print("8. Install packages with xkcd")
+    print("9. Upgrade all pip packages")
+    print("10. Search for a package exactly")
+    print("11. List installed packages with duplicate IDs")
+    print("12. Remove packages with duplicate IDs")
+    print("13. Dump installed packages to file")
+    print("14. Update dumped packages to latest version")
+    print("15. Merge latest installed packages with previous dump")
+    print("16. Run the doctor command in mpm")
+    print("17. Exit")
+
 
 def main():
     parser = argparse.ArgumentParser(description="Wrapper for the Meta Package Manager (mpm)")
@@ -138,7 +158,7 @@ def main():
     parser_doctor.set_defaults(func=doctor)
 
 
-      while True:
+while True:
         print_menu()
         choice = input("Enter your choice: ")
         try:
