@@ -1,12 +1,53 @@
-import json
-import os
-import sys
+import argparse
 import subprocess
-import pkg_resources
-import pip
+import os
+import json
+
+# Define your functions here, for example:
+def search_package(args):
+    pass
+
+def install_package(args):
+    pass
+
+def uninstall_package(args):
+    pass
+
+def list_installed(args):
+    pass
+
+def list_updates(args):
+    pass
+
+def update_package(args):
+    pass
+
+def upgrade_all(args):
+    pass
+
+def upgrade_pip(args):
+    pass
+
+def list_duplicates(args):
+    pass
+
+def remove_duplicates(args):
+    pass
+
+def dump_packages(args):
+    pass
+
+def update_dumped_packages(args):
+    pass
+
+def merge_dump(args):
+    pass
+
+def doctor(args):
+    subprocess.run(["mpm", "doctor"])
 
 def print_menu():
-    print("Menu")
+    print("\nMenu:")
     print("1. Search for a package")
     print("2. Install a package")
     print("3. Uninstall a package")
@@ -22,160 +63,113 @@ def print_menu():
     print("13. Dump installed packages to file")
     print("14. Update dumped packages to latest version")
     print("15. Merge latest installed packages with previous dump")
-    print("16. Exit")
+    print("16. Run the doctor command in mpm")
+    print("17. Exit")
 
-def search(package_name):
-    results = pip.search(package_name)
-    return results
 
-def install(package_name):
-    pip.main(['install', package_name])
+def main():
+    parser = argparse.ArgumentParser(description="Wrapper for the Meta Package Manager (mpm)")
+    subparsers = parser.add_subparsers()
 
-def uninstall(package_name):
-    pip.main(['uninstall', '-y', package_name])
+    # 1. Search for a package
+    # Example: mpm.py search <query> [--exact]
+    parser_search = subparsers.add_parser("search", help="Search for a package (example: 'mpm.py search <query> [--exact]')")
+    parser_search.add_argument("query", help="Search query")
+    parser_search.add_argument("--exact", action="store_true", help="Search for exact package name")
+    parser_search.set_defaults(func=search_package)
 
-def list_installed():
-    packages = [package.project_name for package in pip.get_installed_distributions()]
-    return sorted(packages)
+    # 2. Install a package
+    # Example: mpm.py install <package_name>
+    parser_install = subparsers.add_parser("install", help="Install a package (example: 'mpm.py install <package_name>')")
+    parser_install.add_argument("package_name", help="Name of the package to install")
+    parser_install.set_defaults(func=install_package)
 
-def check_updates():
-    outdated = {}
-    for dist in pip.get_installed_distributions():
-        latest = pip.utils.pypi.get_latest_version(dist.project_name)
-        if dist.version != latest:
-            outdated[dist.project_name] = latest
-    return outdated
+    # 3. Uninstall a package
+    # Example: mpm.py uninstall <package_name>
+    parser_uninstall = subparsers.add_parser("uninstall", help="Uninstall a package (example: 'mpm.py uninstall <package_name>')")
+    parser_uninstall.add_argument("package_name", help="Name of the package to uninstall")
+    parser_uninstall.set_defaults(func=uninstall_package)
 
-def update(package_name):
-    pip.main(['install', '-U', package_name])
+    # 4. List installed packages
+    # Example: mpm.py list [--output-format json]
+    parser_list = subparsers.add_parser("list", help="List installed packages (example: 'mpm.py list [--output-format json]')")
+    parser_list.add_argument("--output-format", choices=["json", "text"], default="text", help="Output format: 'json' or 'text'")
+    parser_list.set_defaults(func=list_installed)
 
-def upgrade_all():
-    pip.main(['install', '-U', 'pip'])
-    pip.main(['freeze', '--local', '|', 'grep', '-v', '^\-e', '|', 'cut', '-d', '=', '-f 1', '|', 'xargs', '-n1', 'pip', 'install', '-U'])
+    # 5. List available updates
+    # Example: mpm.py list-updates [--output-format json]
+    parser_list_updates = subparsers.add_parser("list-updates", help="List available updates (example: 'mpm.py list-updates [--output-format json]')")
+    parser_list_updates.add_argument("--output-format", choices=["json", "text"], default="text", help="Output format: 'json' or 'text'")
+    parser_list_updates.set_defaults(func=list_updates)
 
-def pip_upgrade_all():
-    pip.main(['install', '-U', 'pip'])
-    pip.main(['list', '--outdated', '--format=freeze', '|', 'grep', '-v', '^\-e', '|', 'cut', '-d', '=', '-f 1', '|', 'xargs', '-n1', 'pip', 'install', '-U'])
+    # 6. Update a package
+    # Example: mpm.py update-package <package_name>
+    parser_update_package = subparsers.add_parser("update-package", help="Update a specific package (example: 'mpm.py update-package <package_name>')")
+    parser_update_package.add_argument("package_name", help="Name of the package to update")
+    parser_update_package.set_defaults(func=update_package)
 
-def search_exact(package_name):
-    results = pip.search(package_name)
-    exact_matches = [package for package in results if package_name.lower() == package['name'].lower()]
-    return exact_matches
+    # 7. Upgrade all packages
+    # Example: mpm.py upgrade-all [--manager pip]
+    parser_upgrade_all = subparsers.add_parser("upgrade-all", help="Upgrade all packages (example: 'mpm.py upgrade-all [--manager pip]')")
+    parser_upgrade_all.add_argument("--manager", choices=["pip", "all"], default="all", help="Package manager to use: 'pip' or 'all'")
+    parser_upgrade_all.set_defaults(func=upgrade_all)
 
-def find_duplicates():
-    packages = pip.get_installed_distributions()
-    package_ids = {}
-    for package in packages:
-        package_id = package.project_name.lower()
-        if package_id in package_ids:
-            package_ids[package_id].append(package.project_name)
-        else:
-            package_ids[package_id] = [package.project_name]
-    duplicate_packages = []
-    for package_id, package_names in package_ids.items():
-        if len(package_names) > 1:
-            duplicate_packages.extend(package_names)
-    return duplicate_packages
+    # 9. Upgrade all pip packages
+    # Example: mpm.py upgrade-pip
+    parser_upgrade_pip = subparsers.add_parser("upgrade-pip", help="Upgrade all pip packages (example: 'mpm.py upgrade-pip')")
+    parser_upgrade_pip.set_defaults
+    parser_upgrade_pip.set_defaults(func=upgrade_pip)
 
-def list_duplicates():
-    duplicate_packages = find_duplicates()
-    if not duplicate_packages:
-        print("No packages with duplicate IDs found")
-    else:
-        print("Packages with duplicate IDs:")
-        for package in duplicate_packages:
-            print(package)
+    # 10. Search for a package exactly
+    # Example: mpm.py search <query> --exact
+    # Note: The functionality is already provided in the first search subparser with the [--exact] flag
 
-def remove_duplicates():
-    removed_packages = []
-    package_ids = set()
-    packages = []
-    for package in pip.get_installed_distributions():
-        if package.project_name.lower() not in package_ids:
-            package_ids.add(package.project_name.lower())
-            packages.append(package)
-        else:
-            removed_packages.append(package)
-    pip.main(['uninstall', '-y'] + [package.project_name for package in removed_packages])
-    if not removed_packages:
-        print("No packages with duplicate IDs found")
-    else:
-        print("Packages with duplicate IDs removed:")
-        for package in removed_packages:
-            print(package)
+    # 11. List installed packages with duplicate IDs
+    # Example: mpm.py list-duplicates [--output-format json]
+    parser_list_duplicates = subparsers.add_parser("list-duplicates", help="List installed packages with duplicate IDs (example: 'mpm.py list-duplicates [--output-format json]')")
+    parser_list_duplicates.add_argument("--output-format", choices=["json", "text"], default="text", help="Output format: 'json' or 'text'")
+    parser_list_duplicates.set_defaults(func=list_duplicates)
 
-def dump_packages():
-    installed_packages = pip.get_installed_distributions()
-    filename = input("Enter the name of the file to dump the installed packages to (including the extension): ")
-    with open(filename, 'w') as f:
-        for package in installed_packages:
-            package_info = {
-                "name": package.project_name,
-                "version": package.version,
-                "location": package.location
-            }
-            json.dump(package_info, f)
-            f.write('\n')
-    print(f"Installed packages dumped to {filename} successfully!")
+    # 12. Remove packages with duplicate IDs
+    # Example: mpm.py remove-duplicates
+    parser_remove_duplicates = subparsers.add_parser("remove-duplicates", help="Remove packages with duplicate IDs (example: 'mpm.py remove-duplicates')")
+    parser_remove_duplicates.set_defaults(func=remove_duplicates)
 
-def update_dumped_packages():
-    filename = input("Enter the name of the file containing the dumped packages (including the extension): ")
-    with open(filename, 'r') as f:
-        installed_packages = [line.strip() for line in f]
-    updated_packages = mpm.update_packages(installed_packages)
-    with open(filename, 'w') as f:
-        for package in updated_packages:
-            f.write(f"{package}\n")
-    print("Packages updated successfully!")
+    # 13. Dump installed packages to file
+    # Example: mpm.py dump <file_path>
+    parser_dump = subparsers.add_parser("dump", help="Dump installed packages to a file (example: 'mpm.py dump <file_path>')")
+    parser_dump.add_argument("file_path", help="Path to the file where the installed packages will be dumped")
+    parser_dump.set_defaults(func=dump_packages)
 
-def merge_packages():
-    previous_dump = input("Enter the name of the previous dump file (including the extension): ")
-    current_dump = input("Enter the name of the current dump file (including the extension): ")
-    with open(previous_dump, 'r') as f:
-        previous_packages = [line.strip() for line in f]
-    with open(current_dump, 'r') as f:
-        current_packages = [line.strip() for line in f]
-    merged_packages = set(previous_packages).union(set(current_packages))
-    with open(current_dump, 'w') as f:
-        for package in merged_packages:
-            f.write(f"{package}\n")
-    print("Packages merged successfully!")
+    # 14. Update dumped packages to the latest version
+    # Example: mpm.py update-dump <file_path>
+    parser_update_dump = subparsers.add_parser("update-dump", help="Update dumped packages to the latest version (example: 'mpm.py update-dump <file_path>')")
+    parser_update_dump.add_argument("file_path", help="Path to the file containing the dumped packages")
+    parser_update_dump.set_defaults(func=update_dumped_packages)
+
+    # 15. Merge latest installed packages with previous dump
+    # Example: mpm.py merge-dump <file_path>
+    parser_merge_dump = subparsers.add_parser("merge-dump", help="Merge latest installed packages with previous dump (example: 'mpm.py merge-dump <file_path>')")
+    parser_merge_dump.add_argument("file_path", help="Path to the file containing the previous dumped packages")
+    parser_merge_dump.set_defaults(func=merge_dump)
+
+    # 16. Doctor for mpm 
+    parser_doctor = subparsers.add_parser("doctor", help="Run the doctor command in mpm (example: 'mpm.py doctor')")
+    parser_doctor.set_defaults(func=doctor)
 
 
 while True:
-    print_menu()
-    choice = int(input("Enter your choice: "))
-    if choice == 1:
-        search_package()
-    elif choice == 2:
-        install_package()
-    elif choice == 3:
-        uninstall_package()
-    elif choice == 4:
-        list_installed_packages()
-    elif choice == 5:
-        list_available_updates()
-    elif choice == 6:
-        update_package()
-    elif choice == 7:
-        upgrade_all_packages()
-    elif choice == 8:
-        xkcd_install()
-    elif choice == 9:
-        pip_upgrade_all()
-    elif choice == 10:
-        search_exact()
-    elif choice == 11:
-        list_duplicates()
-    elif choice == 12:
-        remove_duplicates()
-    elif choice == 13:
-        dump_packages()
-    elif choice == 14:
-        update_dumped_packages()
-    elif choice == 15:
-        merge_packages()
-    elif choice == 16:
-        break
-    else:
-        print("Invalid choice, please try again.")
+        print_menu()
+        choice = input("Enter your choice: ")
+        try:
+            args = parser.parse_args(choice.split())
+            if hasattr(args, 'func'):
+                args.func(args)
+            else:
+                print("Invalid choice, please try again.")
+        except SystemExit:
+            # argparse.ArgumentParser raises SystemExit on error or --help. We need to catch it to keep the loop running.
+            continue
+
+if __name__ == "__main__":
+    main()
