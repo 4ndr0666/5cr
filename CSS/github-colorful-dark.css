@@ -1,0 +1,71 @@
+/* ==UserStyle==
+@name           GitHub Colorful Dark
+@namespace      USO Archive
+@author         
+@description    `Dark theme`
+@version        
+@license        GNU General Public License v3.0
+@preprocessor   uso
+==/UserStyle== */
+@-moz-document domain("github.com") {
+    :root {
+        /* colors */
+        --color-fg-default: #09b700!important;
+        --color-fg-muted: #a4b700!important;
+        --color-accent-fg: #00abb7!important;
+        --color-btn-text: #b70000!important;
+        --color-btn-primary-text: black!important;
+        --color-header-text: #09b700!important;
+        --color-header-logo: #b74900!important;
+        /* background colors */
+        --color-page-header-bg: #0e0e0e!important;
+        --color-header-bg: #0e0e0e!important;
+        --color-canvas-default: #0e0e0e!important;
+        --color-canvas-subtle: #0e0e0e!important;
+        --color-canvas-overlay: #0e0e0e!important;
+        --color-canvas-inset: #0e0e0e!important;
+        --color-accent-emphasis: #0e0e0e!important;
+        --color-accent-subtle: #0e0e0e!important;
+        --color-bg-secondary: #0e0e0e!important;
+        --color-project-sidebar-bg: #0e0e0e!important;
+        --color-social-reaction-bg: #0e0e0e!important;
+        --color-calendar-graph-day-bg: #0e0e0e!important;
+        --color-notifications-row-bg: #0e0e0e!important;
+        --color-btn-outline-disabled-bg: #0e0e0e!important;
+        --color-btn-hover-bg: #0e0e0e!important;
+        --color-btn-active-bg: #0e0e0e!important;
+        --color-btn-counter-bg: #0e0e0e!important;
+        /* border colors */
+        --color-btn-active-border: #b74000!important;
+        --color-btn-primary-border: #b7ae00!important;
+        --color-btn-primary-hover-border: #b76e00!important;
+        --color-btn-primary-focus-border: #b70000!important;
+        --color-topic-tag-border: #424200!important;
+        --color-btn-border: #4f4f4f!important;
+        /* shadows */
+        --color-btn-primary-shadow: none!important;
+        --color-btn-primary-inset-shadow: none!important;
+        --color-btn-primary-selected-shadow: none!important;
+        --color-btn-primary-bg: #b76500!important;
+        --color-btn-primary-hover-bg: #b74000!important;
+        --color-btn-primary-selected-bg: #b72800!important;
+        --color-btn-primary-focus-bg: #b70000!important;
+        --color-btn-bg: #222!important;
+        --color-btn-shadow: none!important;
+        --color-btn-inset-shadow: none!important;
+        --color-shadow-small: none!important;
+        --color-primer-shadow-highlight: none!important;
+        --color-project-gradient-in: none!important;
+        --color-project-gradient-out: none!important;
+    }
+
+    a:hover {
+        color: var(--color-accent-fg)!important;
+    }
+
+    .topic-tag:hover,
+    .dropdown-item:hover,
+    .jump-to-suggestions *:hover {
+        color: var(--color-btn-primary-text)!important;
+    }
+}
