@@ -1,0 +1,75 @@
+/usr/bin/bash -x depcheckbeta
++ set -euo pipefail
++ IFS='
+	'
++ DEFAULT_LOGFILE=/home/andro/.local/share/logs/dependency-checker.log
++ PACMAN_LOCK=/var/lib/pacman/db.lck
++ AUR_DIR=/home/build
++ AUR_UPGRADE=false
++ LOG_LEVEL=INFO
++ LOGFILE=/home/andro/.local/share/logs/dependency-checker.log
++ INSTALL_MISSING=false
++ CHECK_MISSING=false
++ UPDATE_AUR=false
++ REBUILD_AUR=false
++ INTERACTIVE=false
++ VERBOSE=false
++ CUSTOM_IGNORE_PKGS=()
++ CUSTOM_IGNORE_GROUPS=()
++ IGNORE_PKGS=()
++ IGNORE_GROUPS=()
++ CYAN='\033[38;2;21;255;255m'
++ RED='\033[0;31m'
++ GREEN='\033[0;32m'
++ YELLOW='\033[1;33m'
++ NC='\033[0m'
++ INFO_SYMBOL=➡️
++ MISSING_DEPS=()
++ declare -a MISSING_DEPS
++ PKGLIST=()
++ declare -a PKGLIST
++ AUR_PACKAGES=()
++ declare -a AUR_PACKAGES
+++ dirname /home/andro/.local/share/logs/dependency-checker.log
++ mkdir -p /home/andro/.local/share/logs
++ sudo mkdir -p /home/build
+++ whoami
+++ whoami
++ sudo chown andro:andro /home/build
++ sudo chmod 755 /home/build
+++ id -u
++ '[' 1000 -ne 0 ']'
++ sudo depcheckbeta
+# --- // Depcheck Alpha //
+
+1. Check Deps
+2. Install Deps
+3. Check and Install Deps
+4. Update AUR
+5. Rebuild AUR
+6. Exit
+
+By your command: 3
+INFO: No package list provided, generating from installed packages...
+INFO: Refreshing pacman databases...
+:: Synchronizing package databases...
+ garuda is up to date
+ wayland is up to date
+ archcraft is up to date
+ core is up to date
+ extra is up to date
+ multilib is up to date
+ chaotic-aur                                        651.0 KiB   650 KiB/s 00:01 [---------------------------------------------] 100%
+INFO: Successfully refreshed pacman databases.
+^\/usr/local/bin/depcheckbeta: line 133: 670035 Quit                    (core dumped) pacman -Qi "$1" &> /dev/null
+INFO: Missing dependency: alsa-utils
+^\/usr/local/bin/depcheckbeta: line 133: 670069 Quit                    (core dumped) pacman -Qi "$1" &> /dev/null
+INFO: Missing dependency: libgl
+^\/usr/local/bin/depcheckbeta: line 133: 670089 Quit                    (core dumped) pacman -Qi "$1" &> /dev/null
+INFO: Missing dependency: libpciaccess
+^\/usr/local/bin/depcheckbeta: line 133: 670113 Quit                    (core dumped) pacman -Qi "$1" &> /dev/null
+INFO: Missing dependency: pam
+^\/usr/local/bin/depcheckbeta: line 133: 670164 Quit                    (core dumped) pacman -Qi "$1" &> /dev/null
+INFO: Missing dependency: libxml2
+^\/usr/local/bin/depcheckbeta: line 133: 670183 Quit                    (core dumped) pacman -Qi "$1" &> /dev/null
+INFO: Missing dependency: libxfixes
